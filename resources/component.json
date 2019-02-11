@@ -1,0 +1,41 @@
+{
+  "id": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/components/library.owl#breakDoc",
+  "type": 2,
+  "inputs": [
+    {
+      "role": "InputFile1",
+      "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#DataObject",
+      "prefix": "-i1",
+      "dimensionality": 0,
+      "id": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/components/library.owl#breakDoc_InputFile1",
+      "isParam": false
+    },
+    {
+      "role": "nToBreakInto",
+      "type": "http://www.w3.org/2001/XMLSchema#int",
+      "prefix": "-p1",
+      "paramDefaultValue": 5,
+      "id": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/components/library.owl#breakDoc_nToBreakInto",
+      "isParam": true
+    }
+  ],
+  "outputs": [
+    {
+      "role": "OutputFiles",
+      "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#DataObject",
+      "prefix": "-o1",
+      "dimensionality": 1,
+      "id": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/components/library.owl#breakDoc_OutputFiles",
+      "isParam": false
+    }
+  ],
+  "rulesText": null,
+  "documentation": "<div><br></div><div><br></div>",
+  "location": "/opt/wings/storage/default/users/admin/CaesarCypher/code/library/breakDoc",
+  "requirement": {
+    "softwareIds": [],
+    "memoryGB": "0",
+    "storageGB": "0",
+    "needs64bit": false
+  }
+}

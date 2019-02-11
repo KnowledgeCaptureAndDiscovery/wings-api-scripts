@@ -1,0 +1,288 @@
+{
+    "inputs": [
+        {
+            "role": "pihm_start-date",
+            "type": "xsd:string",
+            "prefix": "-p0",
+            "id": "https://w3id.org/mint/instance/pihm_start-date",
+            "isParam": true,
+            "paramDefaultValue": "2017-01-01"
+        },
+        {
+            "role": "pihm_region-name",
+            "type": "xsd:string",
+            "prefix": "-p1",
+            "id": "https://w3id.org/mint/instance/pihm_region-name",
+            "isParam": true,
+            "paramDefaultValue": "pg"
+        },
+        {
+            "role": "pihm_end-date",
+            "type": "xsd:string",
+            "prefix": "-p2",
+            "id": "https://w3id.org/mint/instance/pihm_end-date",
+            "isParam": true,
+            "paramDefaultValue": "2017-12-31"
+        },
+        {
+            "role": "pihm-lc",
+            "id": "https://w3id.org/wings/export/MINT#PIHMLandCover",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-lc",
+            "isParam": false,
+            "prefix": "-i4"
+        },
+        {
+            "role": "pihm-soil",
+            "id": "https://w3id.org/wings/export/MINT#PIHMSoil",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-soil",
+            "isParam": false,
+            "prefix": "-i5"
+        },
+        {
+            "role": "pihm-riv",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRiverSegments",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-riv",
+            "isParam": false,
+            "prefix": "-i6"
+        },
+        {
+            "role": "pihm-base",
+            "id": "https://w3id.org/wings/export/MINT#PIHMBase",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-base",
+            "isParam": false,
+            "prefix": "-i7"
+        },
+        {
+            "role": "pihm-geol",
+            "id": "https://w3id.org/wings/export/MINT#PIHMGeologic",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-geol",
+            "isParam": false,
+            "prefix": "-i8"
+        },
+        {
+            "role": "pihm-att",
+            "id": "https://w3id.org/wings/export/MINT#PIHMAttribute",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-att",
+            "isParam": false,
+            "prefix": "-i9"
+        },
+        {
+            "role": "pihm-modelinfo",
+            "id": "https://w3id.org/wings/export/MINT#PIHMModelInfo",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-modelinfo",
+            "isParam": false,
+            "prefix": "-i10"
+        },
+        {
+            "role": "pihm-forc",
+            "id": "https://w3id.org/wings/export/MINT#PIHMForcing",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-forc",
+            "isParam": false,
+            "prefix": "-i11"
+        },
+        {
+            "role": "pihm-ibc",
+            "id": "https://w3id.org/wings/export/MINT#PIHMBoundaryCondition",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-ibc",
+            "isParam": false,
+            "prefix": "-i12"
+        }
+    ],
+    "outputs": [
+        {
+            "role": "pihm-rivFlx2",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx2",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx2",
+            "isParam": false,
+            "prefix": "-o1"
+        },
+        {
+            "role": "pihm-is",
+            "id": "https://w3id.org/wings/export/MINT#PIHMInterceptionStorage",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-is",
+            "isParam": false,
+            "prefix": "-o2"
+        },
+        {
+            "role": "pihm-rivFlx8",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx8",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx8",
+            "isParam": false,
+            "prefix": "-o3"
+        },
+        {
+            "role": "pihm-rivFlx3",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx3",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx3",
+            "isParam": false,
+            "prefix": "-o4"
+        },
+        {
+            "role": "pihm-rivFlx10",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx10",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx10",
+            "isParam": false,
+            "prefix": "-o5"
+        },
+        {
+            "role": "pihm-et0",
+            "id": "https://w3id.org/wings/export/MINT#PIHMEvaporationCanopy",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-et0",
+            "isParam": false,
+            "prefix": "-o6"
+        },
+        {
+            "role": "pihm-rivFlx9",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx9",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx9",
+            "isParam": false,
+            "prefix": "-o7"
+        },
+        {
+            "role": "pihm-rivFlx4",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx4",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx4",
+            "isParam": false,
+            "prefix": "-o8"
+        },
+        {
+            "role": "pihm-unsat",
+            "id": "https://w3id.org/wings/export/MINT#PIHMSoilMoisture",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-unsat",
+            "isParam": false,
+            "prefix": "-o9"
+        },
+        {
+            "role": "pihm-et1",
+            "id": "https://w3id.org/wings/export/MINT#PIHMTranspiration",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-et1",
+            "isParam": false,
+            "prefix": "-o10"
+        },
+        {
+            "role": "pihm-surf",
+            "id": "https://w3id.org/wings/export/MINT#PIHMSurfaceWater",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-surf",
+            "isParam": false,
+            "prefix": "-o11"
+        },
+        {
+            "role": "pihm-rivFlx5",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx5",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx5",
+            "isParam": false,
+            "prefix": "-o12"
+        },
+        {
+            "role": "pihm-snow",
+            "id": "https://w3id.org/wings/export/MINT#PIHMSnowAccumulation",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-snow",
+            "isParam": false,
+            "prefix": "-o13"
+        },
+        {
+            "role": "pihm-et2",
+            "id": "https://w3id.org/wings/export/MINT#PIHMEvaporationGroundSurface",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-et2",
+            "isParam": false,
+            "prefix": "-o14"
+        },
+        {
+            "role": "pihm-rivFlx0",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx0",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx0",
+            "isParam": false,
+            "prefix": "-o15"
+        },
+        {
+            "role": "pihm-infiltration",
+            "id": "https://w3id.org/wings/export/MINT#PIHMInfiltration",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-infiltration",
+            "isParam": false,
+            "prefix": "-o16"
+        },
+        {
+            "role": "pihm-rivFlx6",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx6",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx6",
+            "isParam": false,
+            "prefix": "-o17"
+        },
+        {
+            "role": "pihm-stage",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRiverStage",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-stage",
+            "isParam": false,
+            "prefix": "-o18"
+        },
+        {
+            "role": "pihm-rbed",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRiverBedStorage",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rbed",
+            "isParam": false,
+            "prefix": "-o19"
+        },
+        {
+            "role": "pihm-rivFlx1",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx1",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx1",
+            "isParam": false,
+            "prefix": "-o20"
+        },
+        {
+            "role": "pihm-groundwater",
+            "id": "https://w3id.org/wings/export/MINT#PIHMGroundwaterHead",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-groundwater",
+            "isParam": false,
+            "prefix": "-o21"
+        },
+        {
+            "role": "pihm-rivFlx7",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRivFlx7",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rivFlx7",
+            "isParam": false,
+            "prefix": "-o22"
+        },
+        {
+            "role": "pihm-rech",
+            "id": "https://w3id.org/wings/export/MINT#PIHMRechargeRate",
+            "dimensionality": "0",
+            "type": "http://localhost:8080/wings-portal/export/users/admin/CaesarCypher/data/ontology.owl#pihm-rech",
+            "isParam": false,
+            "prefix": "-o23"
+        }
+    ],
+    "rulesText": "[ backwardPIHMInputsDataHaveSameRegion:  (?c rdf:type acdom:pihmClass)  (?c ac:hasInput ?in1)  (?c ac:hasInput ?in2)  noValue(?in1 dcdom:region)  noValue(?in2 dcdom:region)  uriConcat(?c '_region' ?location)  -> (?in1 dcdom:region ?location)  (?in2 dcdom:region ?location)  print('Setting domain of ?in1 and ?in2 to ?location because both inputs to PIHM should be from the same region')]",
+    "documentation": "PIHM configuration for the region of South Sudan"
+}
