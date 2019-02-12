@@ -1,10 +1,10 @@
 [default]
 serverMint      = http://ontosoft.isi.edu:8001/api/KnowledgeCaptureAndDiscovery/MINT-ModelCatalogQueries
-serverWings     = http://datascience4all.org/wings-portal
+serverWings     = http://ontosoft.isi.edu:7072/wings-portal
 exportWingsURL  = http://localhost:8080/wings-portal
-userWings       = mosorio
-passwordWings   = mosorio123
-domainWings     = mint_test
+userWings       = admin
+passwordWings   = 4dm1n!23
+domainWings     = test9
 endpointMint    = http://ontosoft.isi.edu:3030/ds/query
 
 
