@@ -2,12 +2,20 @@ import requests
 from urllib.parse import urlparse
 import re
 
+
 class Gather(object):
     def __init__(self, server, endpoint):
         self.session = requests.Session()
         self.server = server
         self.endpoint = endpoint
-    
+
+    def get_id(self, full_id):
+        '''
+        Wings does not accept domain outside of him. So,
+        we remove the domain and get the id
+        '''
+        return full_id.split('#')[-1]
+
     def sanitize(self, resource):
         return re.sub(r"(^\d.+$)", r"_\1", resource)
 
@@ -47,7 +55,7 @@ class Gather(object):
             param = {}
             param['role'] = item['paramlabel']['value']
             param['type'] = "xsd:%s" % (item['pdatatype']['value'])
-            param['prefix'] = '-p%d' % (idx)
+            param['prefix'] = '-p%d' % (idx + 1)
             param['id'] = item['p']['value']
             param['isParam'] = True
             param['paramDefaultValue'] = item['defaultvalue']['value']
@@ -63,28 +71,32 @@ class Gather(object):
         self.check_request(resp)
         return resp.json()
 
-    def prepareInputOutput(self, instance, data_type, jsonRequest, dcdom):
+    def prepareInputOutput(self, instance, jsonRequest, dcdom):
         response = self.getInputOutput(instance)
-        selected = {}
-
+        data_types = {}
+        counterInput = 1
         for idx, item in enumerate(response['results']['bindings']):
-            if item['iolabel']['value'] in selected:
+            data_type = self.get_id(item['type']['value'])
+            # ignore duplicate fields
+            if data_type in data_types:
                 continue
+            # prepare json
             io = {}
-            label =  self.sanitize(item['iolabel']['value'])
-            typeV =  self.sanitize(item['type']['value'])
+            label = self.sanitize(item['iolabel']['value'])
+            typeV = self.sanitize(data_type)
             io['role'] = label
             io['id'] = typeV
             io['dimensionality'] = item['dim']['value']
-            io['type'] = dcdom + item['iolabel']['value']
+            io['type'] = dcdom + data_type
             io['isParam'] = False
             if item['prop']['value'] == 'https://w3id.org/mint/modelCatalog#hasInput':
-                io['prefix'] = '-i%d' % (len(jsonRequest['inputs']) + 1)
+                io['prefix'] = '-i%d' % (counterInput)
                 jsonRequest['inputs'].append(io)
+                counterInput += 1
             elif item['prop']['value'] == 'https://w3id.org/mint/modelCatalog#hasOutput':
                 io['prefix'] = '-o%d' % (len(jsonRequest['outputs']) + 1)
                 jsonRequest['outputs'].append(io)
             else:
                 continue
-            selected[item['iolabel']['value']] = True
-        return jsonRequest, selected
+            data_types[data_type] = True
+        return jsonRequest, data_types

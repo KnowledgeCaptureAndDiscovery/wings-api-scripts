@@ -25,9 +25,12 @@ parse arguments
 '''
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--resource", help="Resource URI")
-parser.add_argument("-s", "--server", default="default", help="Server configuration (it must exist in the configfile)")
+parser.add_argument(
+    "-s",
+    "--server",
+    default="default",
+    help="Server configuration (it must exist in the configfile)")
 args = parser.parse_args()
-
 
 
 '''
@@ -36,7 +39,7 @@ read configuration
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-if not args.server in config:
+if args.server not in config:
     logger.error("Server configuration does not exist")
     exit(1)
 
@@ -56,11 +59,6 @@ logger.info("User wings: %s", userWings)
 logger.info("Domain wings: %s", domainWings)
 logger.info("Endpoint mint: %s", endpointMint)
 
-def createDataWings(datatypes, parent_type, wings):
-    for data_type, value in datatypes.items():
-        logger.debug("Creating data %s", data_type)
-        wings.new_data_type(data_type, parent_type)
-
 
 def exists(json, key):
     if key in json:
@@ -69,19 +67,32 @@ def exists(json, key):
         return None
 
 
-def generateData(resource, wingsData, data_type_id):
+def createDataWings(datatypes, wings):
+    '''
+    Create all data objects of a component.
+    dataypes: all the datatypes
+    wings: object that allow the operations
+    '''
+    # todo: fix hardcoding
+    parent_type_id = 'http://www.wings-workflows.org/ontology/data.owl#DataObject'
+    for data_type, value in datatypes.items():
+        logger.info("Creating data %s", data_type)
+        wings.new_data_type(data_type, parent_type_id)
+
+
+def generateData(resource, wingsData):
     jsonRequest = {}
     jsonRequest['inputs'] = []
     jsonRequest['outputs'] = []
-    data_type_id = wingsData.new_data_type(data_type_name, None)
+
     description = mint.describeURI(resource)
     jsonRequest['rulesText'] = exists(description, 'hasRule')
     jsonRequest['documentation'] = exists(description, 'description')
     jsonRequest = mint.prepareParameters(resource, jsonRequest)
 
     jsonRequest, datatypes = mint.prepareInputOutput(
-        resource, data_type_id, jsonRequest, wingsData.dcdom)
-    createDataWings(datatypes, resource_name, wingsData)
+        resource, jsonRequest, wingsData.dcdom)
+    createDataWings(datatypes, wingsData)
     return jsonRequest
 
 
@@ -102,8 +113,8 @@ def uploadComponent(resource):
 
 
 def createComponent(resource, wingsData, wingsComponent,
-                    data_type_name, component_type, component_id):
-    componentJSON = generateData(resource, wingsData, data_type_name)
+                    component_type, component_id):
+    componentJSON = generateData(resource, wingsData)
     uploadDataPath = uploadComponent(resource)
     wingsComponent.new_component_type(component_type, parent_type)
     wingsComponent.new_component(component_id, component_type)
@@ -113,6 +124,7 @@ def createComponent(resource, wingsData, wingsComponent,
     else:
         logger.info("Zip file is missing %s", resource)
     return componentJSON
+
 
 if __name__ == "__main__":
     # todo: check if it is a ModelConfiguration
@@ -131,7 +143,6 @@ if __name__ == "__main__":
 
     resource = args.resource
     resource_name = resource.split('/')[-1]
-    data_type_name = resource_name
     component_id = resource_name
     component_type = component_id.capitalize()
     parent_type = None
@@ -139,7 +150,6 @@ if __name__ == "__main__":
         resource,
         wingsData,
         wingsComponent,
-        data_type_name,
         component_type,
         component_id)
     print(json.dumps(componentJSON))

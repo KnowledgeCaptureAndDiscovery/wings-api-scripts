@@ -5,6 +5,7 @@ from .userop import UserOperation
 import requests
 from urllib.parse import urlencode, quote_plus
 
+
 class ManageData(UserOperation):
 
     def __init__(self, server, exportURL, userid, domain):
@@ -16,13 +17,13 @@ class ManageData(UserOperation):
         try:
             resp.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            print(err)   
+            print(err)
         except requests.exceptions.RequestException as err:
             print(err)
-        return resp 
+        return resp
 
     def get_type_id(self, typeid):
-        if typeid == None:
+        if typeid is None:
             return 'http://www.wings-workflows.org/ontology/data.owl#DataObject'
         elif not re.match(r"(http:|https:)//", typeid):
             return self.dcdom + typeid
@@ -38,10 +39,9 @@ class ManageData(UserOperation):
     def new_data_type(self, dtype, parent):
         parent = self.get_type_id(parent)
         dtype = self.get_type_id(dtype)
-        print("The datatypeid is " + dtype)
         postdata = {'parent_type': parent, 'data_type': dtype}
         resp = self.session.post(self.get_request_url() +
-                          'data/newDataType', postdata)
+                                 'data/newDataType', postdata)
         self.check_request(resp)
         return dtype
 
@@ -62,7 +62,7 @@ class ManageData(UserOperation):
         dataid = self.get_data_id(dataid)
         postdata = {'data_id': dataid, 'data_type': dtype}
         resp = self.session.post(self.get_request_url() +
-                          'data/addDataForType', postdata)
+                                 'data/addDataForType', postdata)
         self.check_request(resp)
 
     def del_data_type(self, dtype):
@@ -80,7 +80,7 @@ class ManageData(UserOperation):
         resp = self.session.get(
             self.get_request_url() + 'data/getDataHierarchyJSON')
         return resp.json()
-    
+
     def get_data_description(self, dataid):
         dataid = self.get_data_id(dataid)
         params = {'data_id': dataid}
@@ -90,13 +90,13 @@ class ManageData(UserOperation):
 
     def get_datatype_description(self, dtype):
         dtype = self.get_type_id(dtype)
-        params =  {'data_type': dtype}
+        params = {'data_type': dtype}
         try:
             resp = self.session.get(
                 self.get_request_url() + 'data/getDataTypeJSON', params=params)
             resp.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            print(err)   
+            print(err)
         except requests.exceptions.RequestException as err:
             print(err)
 
@@ -125,9 +125,8 @@ class ManageData(UserOperation):
         postdata = {'propvals_json': json.dumps(
             pvals), 'data_id': self.get_data_id(dataid)}
         resp = self.session.post(self.get_request_url() +
-                          'data/saveDataJSON', postdata)
+                                 'data/saveDataJSON', postdata)
         self.check_request(resp)
-        
 
     def set_data_location(self, dataid, location):
         postdata = {'data_id': self.get_data_id(dataid), 'location': location}
