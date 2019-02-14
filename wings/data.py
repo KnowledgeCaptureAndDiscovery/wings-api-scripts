@@ -38,6 +38,7 @@ class ManageData(UserOperation):
     def new_data_type(self, dtype, parent):
         parent = self.get_type_id(parent)
         dtype = self.get_type_id(dtype)
+        print("The datatypeid is " + dtype)
         postdata = {'parent_type': parent, 'data_type': dtype}
         resp = self.session.post(self.get_request_url() +
                           'data/newDataType', postdata)

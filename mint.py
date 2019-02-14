@@ -1,4 +1,3 @@
-import re
 import json
 import argparse
 import wings.planner
@@ -8,6 +7,7 @@ import logging
 import requests
 import shutil
 import configparser
+import tempfile
 
 '''
 logging
@@ -21,24 +21,40 @@ logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 '''
+parse arguments
+'''
+parser = argparse.ArgumentParser()
+parser.add_argument("-r", "--resource", help="Resource URI")
+parser.add_argument("-s", "--server", default="default", help="Server configuration (it must exist in the configfile)")
+args = parser.parse_args()
+
+
+
+'''
 read configuration
 '''
 config = configparser.ConfigParser()
 config.read('config.ini')
-serverMint = config['datascience']['serverMint']
-serverWings = config['datascience']['serverWings']
-exportWingsURL = config['datascience']['exportWingsURL']
-userWings = config['datascience']['userWings']
-passwordWings = config['datascience']['passwordWings']
-domainWings = config['datascience']['domainWings']
-endpointMint = config['datascience']['endpointMint']
 
-'''
-parse resource
-'''
-parser = argparse.ArgumentParser()
-parser.add_argument("-r", "--resource", help="Resource URI")
+if not args.server in config:
+    logger.error("Server configuration does not exist")
+    exit(1)
 
+serverMint = config['default']['serverMint']
+serverWings = config['default']['serverWings']
+exportWingsURL = config['default']['exportWingsURL']
+userWings = config['default']['userWings']
+passwordWings = config['default']['passwordWings']
+domainWings = config['default']['domainWings']
+endpointMint = config['default']['endpointMint']
+
+logger.info("Server mint: %s", serverMint)
+logger.info("Server wings: %s", serverWings)
+
+logger.info("Export wings url: %s", exportWingsURL)
+logger.info("User wings: %s", userWings)
+logger.info("Domain wings: %s", domainWings)
+logger.info("Endpoint mint: %s", endpointMint)
 
 def createDataWings(datatypes, parent_type, wings):
     for data_type, value in datatypes.items():
@@ -96,10 +112,9 @@ def createComponent(resource, wingsData, wingsComponent,
         wingsComponent.upload(uploadDataPath, component_id)
     else:
         logger.info("Zip file is missing %s", resource)
-
+    return componentJSON
 
 if __name__ == "__main__":
-    args = parser.parse_args()
     # todo: check if it is a ModelConfiguration
     mint = mint.Gather(serverMint, endpointMint)
     wingsData = wings.ManageData(
@@ -120,10 +135,11 @@ if __name__ == "__main__":
     component_id = resource_name
     component_type = component_id.capitalize()
     parent_type = None
-    createComponent(
+    componentJSON = createComponent(
         resource,
         wingsData,
         wingsComponent,
         data_type_name,
         component_type,
         component_id)
+    print(json.dumps(componentJSON))

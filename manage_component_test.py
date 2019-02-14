@@ -19,11 +19,11 @@ if not component.login(password):
 #new component type
 parent_type = None
 component_id="sumRows"
-component_type = component_id.capitalize()
+component_type = component_id
 component.new_component_type(component_type, parent_type)
 component.new_component(component_id, component_type)
 
-
+exit(1)
 #Delete
 component_type = "tododelete"
 component.new_component_type(component_type, parent_type)
@@ -40,10 +40,6 @@ print(component.get_component_type_description(component_type))
 print(component.get_all_items())
 
 
-#upload
-upload_component="assets/pihm.zip"
-cid = component.get_component_id(component_id)
-component.upload(upload_component, component_id)
 
 save_json = "resources/component2.json"
 #Save json

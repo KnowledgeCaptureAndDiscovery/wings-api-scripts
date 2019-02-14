@@ -47,7 +47,6 @@ class ManageComponent(UserOperation):
                     'cid': ctype, 'load_concrete': "false"}
         resp = self.session.post(self.get_request_url() +
                           'components/type/addComponent', postdata)
-        print(resp.text)
         self.check_request(resp)
 
     def new_component(self, cid, parent):

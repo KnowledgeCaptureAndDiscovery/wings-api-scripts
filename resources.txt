@@ -28,4 +28,3 @@ https://w3id.org/mint/instance/cycles_to_crop_merge_multiple_points
 https://w3id.org/mint/instance/river_depth_estimation
 https://w3id.org/mint/instance/river_depth_preprocessing
 https://w3id.org/mint/instance/pihm_to_netcdf
-https://w3id.org/mint/instance/cycles_outputs
