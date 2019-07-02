@@ -105,7 +105,7 @@ def publisher_execution(execution_selected):
         output = get_sparql_info(publish_output["url"])
         write_csv_file(output.json(), execution_id)
     else:
-        print("Error")
+        logger.error("Unable to publish {}".format(execution_selected))
 
 '''
 read configuration
@@ -147,7 +147,6 @@ if __name__ == "__main__":
     pattern = "cycles"
     executions = wingsExecution.list_executions(pattern=pattern, done=True).json()
     logger.info("{} executions matches with the pattern {}".format(len(executions), pattern))
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         for execution in executions:
             executor.submit(publisher_execution, execution)
