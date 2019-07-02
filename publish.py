@@ -135,8 +135,6 @@ logger.info("User wings: %s", userWings)
 logger.info("Domain wings: %s", domainWings)
 logger.info("Endpoint mint: %s", endpointMint)
 
-
-
 if __name__ == "__main__":
     wingsExecution = wings.Execution(
         serverWings,
