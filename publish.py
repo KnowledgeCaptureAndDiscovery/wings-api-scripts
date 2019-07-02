@@ -62,9 +62,17 @@ SELECT DISTINCT ?filename ?unique ?location ?workflow from <''' + execution + ''
     return response
 
 
-def prepare_files(json_response, execution_id):
-    try:
+def write_csv_file(json_response, execution_id):
+    '''
 
+    @param json_response:
+    @type json_response:
+    @param execution_id:
+    @type execution_id:
+    @return:
+    @rtype:
+    '''
+    try:
         unique = json_response['results']['bindings'][0]['unique']['value']
         filename_unique = "csv/" + unique + '.csv'
         if os.path.exists(filename_unique):
@@ -88,6 +96,16 @@ def prepare_files(json_response, execution_id):
     except Exception as error:
         logger.error("error {} \n {}".format(execution_id, error))
 
+
+def publisher_execution(execution_selected):
+    execution_id = execution_selected["id"]
+    logger.info("publishing {}".format(execution_id))
+    publish_output = wingsExecution.publish(execution_id).json()
+    if publish_output["url"]:
+        output = get_sparql_info(publish_output["url"])
+        write_csv_file(output.json(), execution_id)
+    else:
+        print("Error")
 
 '''
 read configuration
@@ -118,16 +136,6 @@ logger.info("Domain wings: %s", domainWings)
 logger.info("Endpoint mint: %s", endpointMint)
 
 
-def write_execution(execution_selected):
-    execution_id = execution_selected["id"]
-    logger.info("publishing {}".format(execution_id))
-    publish_output = wingsExecution.publish(execution_id).json()
-    if publish_output["url"]:
-        output = get_sparql_info(publish_output["url"])
-        prepare_files(output.json(), execution_id)
-    else:
-        print("Error")
-
 
 if __name__ == "__main__":
     wingsExecution = wings.Execution(
@@ -144,4 +152,4 @@ if __name__ == "__main__":
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
         for execution in executions:
-            executor.submit(write_execution, execution)
+            executor.submit(publisher_execution, execution)
