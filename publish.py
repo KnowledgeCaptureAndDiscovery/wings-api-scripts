@@ -2,13 +2,12 @@ import json
 import argparse
 import os
 
-import wings.planner
 import wings.component
-import mint.gather
 import logging
 import requests
 import configparser
 import csv
+import concurrent.futures
 
 
 '''
@@ -35,31 +34,6 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-'''
-read configuration
-'''
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-if args.server not in config:
-    logger.error("Server configuration does not exist")
-    exit(1)
-
-serverMint = config['default']['serverMint']
-serverWings = config['default']['serverWings']
-exportWingsURL = config['default']['exportWingsURL']
-userWings = config['default']['userWings']
-passwordWings = config['default']['passwordWings']
-domainWings = config['default']['domainWings']
-endpointMint = config['default']['endpointMint']
-
-logger.info("Server mint: %s", serverMint)
-logger.info("Server wings: %s", serverWings)
-
-logger.info("Export wings url: %s", exportWingsURL)
-logger.info("User wings: %s", userWings)
-logger.info("Domain wings: %s", domainWings)
-logger.info("Endpoint mint: %s", endpointMint)
 
 def get_sparql_info(execution):
     headers = {
@@ -88,14 +62,13 @@ SELECT DISTINCT ?filename ?unique ?location ?workflow from <''' + execution + ''
     return response
 
 
-def prepare_files(json_response):
+def prepare_files(json_response, execution_id):
     try:
-        print("Writing file " + execution_id)
 
         unique = json_response['results']['bindings'][0]['unique']['value']
         filename_unique = "csv/" + unique + '.csv'
         if os.path.exists(filename_unique):
-            print("Skipping file " + execution_id)
+            logger.info("skipping {}, the file exists".format(execution_id))
             return
 
         with open(filename_unique, mode='w') as csv_file:
@@ -112,8 +85,49 @@ def prepare_files(json_response):
                 else:
                     continue
                 writer.writerow({'id': unique, 'filename': filename, 'location': location})
-    except:
+    except Exception as error:
+        logger.error("error {} \n {}".format(execution_id, error))
+
+
+'''
+read configuration
+'''
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+if args.server not in config:
+    logger.error("Server configuration does not exist")
+    exit(1)
+
+
+config_selected = config['default']
+serverMint = config_selected['serverMint']
+serverWings = config_selected['serverWings']
+exportWingsURL = config_selected['exportWingsURL']
+userWings = config_selected['userWings']
+passwordWings = config_selected['passwordWings']
+domainWings = config_selected['domainWings']
+endpointMint = config_selected['endpointMint']
+
+logger.info("Server mint: %s", serverMint)
+logger.info("Server wings: %s", serverWings)
+
+logger.info("Export wings url: %s", exportWingsURL)
+logger.info("User wings: %s", userWings)
+logger.info("Domain wings: %s", domainWings)
+logger.info("Endpoint mint: %s", endpointMint)
+
+
+def write_execution(execution_selected):
+    execution_id = execution_selected["id"]
+    logger.info("publishing {}".format(execution_id))
+    publish_output = wingsExecution.publish(execution_id).json()
+    if publish_output["url"]:
+        output = get_sparql_info(publish_output["url"])
+        prepare_files(output.json(), execution_id)
+    else:
         print("Error")
+
 
 if __name__ == "__main__":
     wingsExecution = wings.Execution(
@@ -124,14 +138,10 @@ if __name__ == "__main__":
     if not wingsExecution.login(passwordWings):
         logger.error("Login failed")
         exit(1)
-    executions = wingsExecution.list_executions().json()
-    for execution in executions:
-        if execution["runtimeInfo"]["status"] == "SUCCESS":
-            execution_id = execution["id"]
-            print("Exporting " + execution_id)
-            publish_output = wingsExecution.publish(execution_id).json()
-            if publish_output["url"]:
-                output = get_sparql_info(publish_output["url"])
-                prepare_files(output.json())
-            else:
-                print("Error")
+    pattern = "cycles"
+    executions = wingsExecution.list_executions(pattern=pattern, done=True).json()
+    logger.info("{} executions matches with the pattern {}".format(len(executions), pattern))
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
+        for execution in executions:
+            executor.submit(write_execution, execution)

@@ -20,9 +20,13 @@ class Execution(UserOperation):
             print(err)
         return resp
 
-
-    def list_executions(self):
-        resp = self.session.get(self.get_request_url() + 'executions/getRunList')
+    def list_executions(self, pattern=None, done=None):
+        params = {}
+        if pattern:
+            params['pattern'] = pattern
+        if done:
+            params['status'] = done
+        resp = self.session.get(self.get_request_url() + 'executions/getRunList', params=params)
         return self.check_request(resp)
 
     def publish(self, execution_id):
