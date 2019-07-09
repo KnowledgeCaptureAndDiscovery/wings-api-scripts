@@ -53,61 +53,13 @@ logger.info("Domain wings: %s", domainWings)
 logger.info("Endpoint mint: %s", endpointMint)
 
 
-def get_sparql_info(execution):
-    headers = {
-        'Accept': 'application/sparql-results+json',
-    }
 
-    query = '''
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX provModel: <http://openprovenance.org/model/opmo#>
-PREFIX opmw: <https://www.opmw.org/ontology/>
-SELECT DISTINCT ?filename ?unique ?location ?workflow from <''' + execution + '''> {
-?param a opmw:WorkflowExecutionArtifact ;
-    rdfs:label "unique_id";
-    provModel:account ?workflow; 
-    opmw:hasValue ?unique .
-?file provModel:account ?workflow;
-    rdfs:label ?filename; 
-    opmw:hasLocation ?location .   
-}'''
-
-    data = {
-        'query': query
-    }
-
-    response = requests.post('https://endpoint.mint.isi.edu/provenance/sparql', headers=headers, data=data)
-    return response
-
-
-def write_csv_file(filename, list_dict):
-    '''
-
-    @param json_response:
-    @type json_response:
-    @param execution_id:
-    @type execution_id:
-    @return:
-    @rtype:
-    '''
-    try:
-        filename_unique = "csv/" + filename + '.csv'
-        with open(filename_unique, mode='w') as csv_file:
-            fs = {}
-            fieldnames = ['id', 'link']
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-            for dict in list_dict:
-                writer.writerow(dict)
-    except Exception as error:
-        logger.error("error write the file {} \n {}".format(filename, error))
-
-
-def publish_page(execution_id):
-    publish_output = wingsExecution.publish(execution_id).json()
-    if "url" in publish_output.keys():
-        logger.debug("Published {}".format(execution_id))
+def delete_execution(execution_id):
+    resp = wingsExecution.delete_run(execution_id).json()
+    if resp["success"]:
+        logger.info("delete execution {} success".format(execution_id))
     else:
-        logger.error("Unable to publish {}".format(execution_id))
+        logger.error("delete execution {} failed".format(execution_id))
 
 
 '''
@@ -137,6 +89,6 @@ if __name__ == "__main__":
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         for execution in executions:
             execution_id = execution["id"]
-            executor.submit(publish_page, execution_id)
+            executor.submit(delete_execution, execution_id)
 
 
