@@ -49,7 +49,5 @@ class Execution(UserOperation):
 
     def publish(self, execution_id):
         postdata = {'run_id': execution_id}
-
-
         resp = self.session.post(self.get_request_url() + 'executions/publishRun', data=postdata)
         return self.check_request(resp)

@@ -1,14 +1,9 @@
-import json
 import argparse
-import os
+import concurrent.futures
+import configparser
+import logging
 
 import wings.component
-import logging
-import requests
-import configparser
-import csv
-import concurrent.futures
-from math import ceil
 
 '''
 logging
@@ -53,18 +48,21 @@ logger.info("Domain wings: %s", domainWings)
 logger.info("Endpoint mint: %s", endpointMint)
 
 
-
-def delete_execution(execution_id):
+def delete_execution(execution):
+    '''
+    Delete the execution
+    @param execution: the object returned by wings
+    @type execution: string
+    @return:
+    @rtype:
+    '''
+    execution_id = execution["id"]
     resp = wingsExecution.delete_run(execution_id).json()
     if resp["success"]:
         logger.info("delete execution {} success".format(execution_id))
     else:
         logger.error("delete execution {} failed".format(execution_id))
 
-
-'''
-read configuration
-'''
 
 if args.server not in config:
     logger.error("Server configuration does not exist")
@@ -88,7 +86,4 @@ if __name__ == "__main__":
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         for execution in executions:
-            execution_id = execution["id"]
-            executor.submit(delete_execution, execution_id)
-
-
+            executor.submit(delete_execution, execution)
