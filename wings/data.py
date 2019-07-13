@@ -45,10 +45,14 @@ class ManageData(UserOperation):
         self.check_request(resp)
         return dtype
 
-    def add_type_properties(self, dtype, properties):
+    def add_type_properties(self, dtype, properties={}, format=None):
+        if not properties and not format:
+            raise ValueError("properties or format is required")
         xsd = 'http://www.w3.org/2001/XMLSchema#'
         dtype = self.get_type_id(dtype)
         data = {'add': {}, 'del': {}, 'mod': {}}
+        if format:
+            data["format"] = format
         for pname in properties:
             pid = self.get_type_id(pname)
             prange = xsd + properties[pname]
