@@ -6,8 +6,8 @@ from .userop import UserOperation
 
 class Planner(UserOperation):
 
-    def __init__(self, server, userid, domain, template):
-        super(Planner, self).__init__(server, userid, domain)
+    def __init__(self, server, exportURL, userid, domain, template):
+        super(Planner, self).__init__(server, exportURL, userid, domain)
         self.libns = self.get_export_url() + "data/library.owl#"
         self.wflowns = self.get_export_url() + "workflows/" + template + ".owl#"
         self.wflowid = self.wflowns + template
