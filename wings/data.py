@@ -99,6 +99,7 @@ class ManageData(UserOperation):
             resp = self.session.get(
                 self.get_request_url() + 'data/getDataTypeJSON', params=params)
             resp.raise_for_status()
+            return resp.json()
         except requests.exceptions.HTTPError as err:
             print(err)
         except requests.exceptions.RequestException as err:
