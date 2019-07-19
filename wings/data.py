@@ -48,18 +48,43 @@ class ManageData(UserOperation):
     def add_type_properties(self, dtype, properties={}, format=None):
         if not properties and not format:
             raise ValueError("properties or format is required")
-        xsd = 'http://www.w3.org/2001/XMLSchema#'
+
+        xsd = "http://www.w3.org/2001/XMLSchema#"
         dtype = self.get_type_id(dtype)
-        data = {'add': {}, 'del': {}, 'mod': {}}
+        data = {"add": {}, "del": {}, "mod": {}}
+
         if format:
             data["format"] = format
-        for pname in properties:
-            pid = self.get_type_id(pname)
-            prange = xsd + properties[pname]
-            data['add'][pid] = {'prop': pname, 'pid': pid, 'range': prange}
-        postdata = {'data_type': dtype, 'props_json': json.dumps(data)}
-        self.session.post(self.get_request_url() +
-                          'data/saveDataTypeJSON', postdata)
+
+        if properties is not None:
+            cp = self.get_datatype_description(dtype)
+            np = {}
+            for c in cp["properties"]:
+                np[c["id"].split("#")[-1]] = c["range"].split("#")[-1]
+
+            for pname, ptype in properties.items():
+                if pname not in np:
+                    pid = self.get_type_id(pname)
+                    prange = xsd + ptype
+                    data["add"][pid] = {"prop": pname, "pid": pid, "range": prange}
+
+            for pname, ptype in properties.items():
+                if pname in np:
+                    pid = self.get_type_id(pname)
+                    prange = xsd + ptype
+                    data["mod"][pid] = {"prop": pname, "pid": pid, "range": prange}
+
+            for pname, ptype in np.items():
+                if pname not in properties:
+                    pid = self.get_type_id(pname)
+                    prange = xsd + ptype
+                    data["del"][pid] = {"prop": pname, "pid": pid, "range": prange}
+
+        postdata = {"data_type": dtype, "props_json": json.dumps(data)}
+        resp = self.session.post(
+            self.get_request_url() + "data/saveDataTypeJSON", postdata
+        )
+        self.check_request(resp)
 
     def add_data_for_type(self, dataid, dtype):
         dtype = self.get_type_id(dtype)
