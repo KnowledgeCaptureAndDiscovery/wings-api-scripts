@@ -181,7 +181,8 @@ if __name__ == "__main__":
         status = execution["runtimeInfo"]["status"]
         start_time = execution["runtimeInfo"]["startTime"]
         if execution["runtimeInfo"]["status"] == "SUCCESS" and (start_time > start_time_pattern):
-            run(execution, pattern)
+            print(execution)
+            #run(execution, pattern)
 
     # with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
     #     for execution in executions:

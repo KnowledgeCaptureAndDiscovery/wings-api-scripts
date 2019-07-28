@@ -5,7 +5,7 @@ import csv
 import logging
 import time
 
-import wings.component
+import wings
 
 '''
 logging
@@ -83,7 +83,7 @@ def publish_page(execution):
     execution_start = execution["runtimeInfo"]["startTime"]
     if execution_start:
         execution_start_time = time.ctime(execution_start)
-    publish_output = wingsExecution.publish(execution_id).json()
+    publish_output = wings.Execution.publish(execution_id).json()
     if "url" in publish_output.keys():
         logger.info("Published {} - {} ".format(execution_id, execution_start_time))
     else:
@@ -96,18 +96,19 @@ if args.server not in config:
     exit(1)
 
 if __name__ == "__main__":
-    wingsExecution = wings.Execution(
-        serverWings,
-        exportWingsURL,
-        userWings,
-        domainWings)
-    if not wingsExecution.login(passwordWings):
+    wings_instance = wings.init(
+        server=serverWings,
+        export_url=exportWingsURL,
+        username=userWings,
+        domain=domainWings)
+    if not wings_instance.login(passwordWings):
         logger.error("Login failed")
         exit(1)
 
     pattern = "economic"
     status = "SUCCESS"
-    executions_resp = wingsExecution.list_executions_by_page(0, pattern=pattern, status=status).json()
+
+    executions_resp = wings_instance.execution.list_executions_by_page(0, pattern, status).json()
     executions = executions_resp["rows"]
     logger.warning("{} executions matches with the pattern {}".format(len(executions), pattern))
 
@@ -117,6 +118,4 @@ if __name__ == "__main__":
             try:
                 submit.result()
             except TypeError as e:
-                print(e)
-
-
+                logger.error(e)
