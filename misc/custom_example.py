@@ -2,17 +2,10 @@ import sys
 import csv
 import wings.data
 
-server = 'http://www.wings-workflows.org/wings-omics-portal'
-#server = 'http://ontosoft.isi.edu:8080/wings-portal'
-#server = 'http://varuns-mbp.local:9090/wings-portal'
-#userid = 'admin'
-#password = 'admin123'
-#password = '4dm1n!23'
-#password = 'admin123'
-#domain = 'OpenCV'
-userid = 'ravali'
-password = 'ravali123'
-domain = 'genomics'
+server = '[server]'
+userid = '[username]'
+password = '[password]'
+domain = '[domain]'
 
 # Create manage data api
 data = wings.ManageData(server, userid, domain)
